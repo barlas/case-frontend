@@ -1,9 +1,5 @@
 'use client';
 
-import cx from 'classnames';
-import { format, isWithinInterval } from 'date-fns';
-import { useEffect, useState } from 'react';
-
 interface Menu {
   sections: {
     title: string;
@@ -14,7 +10,28 @@ interface Menu {
   }[];
 }
 
-const SAMPLE: Menu = {
+export const SAMPLE = {
+  sections: [
+    {
+      title: "Main Selection",
+      options: [
+        { course: "HUMUS", ingredients: "Chickpeas, tahini, olive oil" },
+        { course: "GARDEN FRESH SALAD", ingredients: "Mixed greens, vinaigrette" },
+        { course: "BEEF STROGANOFF", ingredients: "Beef, mushrooms, creamy sauce" },
+      ],
+    },
+    {
+      title: "Before Landing",
+      options: [
+        { course: "SEASONAL FRESH FRUITS", ingredients: "Assorted seasonal fruits" },
+        { course: "OMELETTE", ingredients: "Eggs, cheese, sautéed vegetables" },
+      ],
+    },
+  ],
+};
+
+/*
+export const SAMPLE: Menu = {
   sections: [
     {
       title: "Main Selection",
@@ -57,14 +74,34 @@ const SAMPLE: Menu = {
     },
   ],
 };
-
+*/
 
 export function Menu({
   menu = SAMPLE,
 }: {
   menu?: Menu;
 }) {
+  // Ensure menu has a default structure if it's undefined
+  const safeMenu = menu && menu.sections ? menu : { sections: [] };
+
   return (
-    <div></div>
+    <div className="bg-card p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Menu</h2>
+      {safeMenu.sections.map((section, idx) => (
+        <div key={idx} className="mb-4">
+          <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
+          <ul>
+            {section.options.map((item, index) => (
+              <li key={index} className="mb-1">
+                <span className="font-medium">{item.course}:</span> {item.ingredients}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div className="bg-accent p-4 mt-4 rounded-md text-center font-bold">
+        Barlas
+      </div>
+    </div>
   );
 }

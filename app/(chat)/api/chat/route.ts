@@ -12,6 +12,7 @@ import { customModel } from '@/ai';
 import { models } from '@/ai/models';
 import { blocksPrompt, regularPrompt, systemPrompt } from '@/ai/prompts';
 import { auth } from '@/app/(auth)/auth';
+import { SAMPLE } from '@/components/custom/menu';
 import {
   deleteChatById,
   getChatById,
@@ -103,53 +104,38 @@ export async function POST(request: Request) {
       getMenu: {
         description: 'Extract menu items from an uploaded image of a meal menu',
         parameters: z.object({
-          imageContent: z.string().describe('The base64-encoded image content of the menu image'),
+          menuId: z.string(),
         }),
-        execute: async ({ imageContent }) => {
-          const prompt = `
-            Please analyze the menu in the following base64-encoded image and convert the content to JSON with the following structure:
-            
-            {
-              "sections": [
-                {
-                  "title": "Section Title",
-                  "options": [
-                    { "course": "Course Name", "ingredients": "Ingredients (optional)" },
-                    ...
-                  ]
-                },
-                ...
-              ]
-            }
-            
-            Provide only the JSON data as output, without any additional text.
-            
-            Image data:
-            ${imageContent}
-          `;
-          
-          const { fullStream } = await streamText({
-            model: customModel('gpt-4'),
-            messages: [{ role: 'user', content: prompt }],
-          });
-      
-          let content = '';
-      
-          for await (const delta of fullStream) {
-            if (delta.type === 'text-delta') {
-              content += delta.textDelta;
-            }
-          }
+        execute: async () => {
+          console.log("Entering getMenu function");
       
           try {
-            const parsedData = JSON.parse(content.trim());
-            return parsedData;
-          } catch (e) {
-            console.error('Failed to parse JSON from GPT-4 response:', e);
-            return { error: 'Failed to parse JSON from GPT-4 response' };
+            // Mock result for testing
+            let resultText = "Sample menu data for testing purposes.";
+            console.log("Mock resultText:", resultText);
+      
+            // Ensure resultText is not null and is a string
+            if (!resultText || typeof resultText !== 'string') {
+              resultText = "Fallback menu content"; // Fallback if resultText is invalid
+              console.warn("resultText was null or not a string, using fallback content.");
+            }
+      
+            // Ensure JSON output is a string
+            const output = JSON.stringify(SAMPLE);
+            if (!output || typeof output !== 'string') {
+              console.warn("Output is null or not a string, using fallback JSON.");
+              return JSON.stringify({ error: "Fallback JSON content" });
+            }
+      
+            return output;
+          } catch (error) {
+            console.error("Error in getMenu function:", error);
+            return JSON.stringify({
+              error: "An error occurred in getMenu. Fallback content provided.",
+            });
           }
         },
-      },            
+      },
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({
