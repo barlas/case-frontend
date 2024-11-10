@@ -11,6 +11,7 @@ import { UIBlock } from './block';
 import { DocumentToolCall, DocumentToolResult } from './document';
 import { SparklesIcon } from './icons';
 import { Markdown } from './markdown';
+import { Menu } from './menu';
 import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
 import { Weather } from './weather';
@@ -65,7 +66,9 @@ export const PreviewMessage = ({
 
                   return (
                     <div key={toolCallId}>
-                      {toolName === 'getWeather' ? (
+                      {toolName === 'getMenu' ? (
+                        <Menu menu={result} />
+                      ) : toolName === 'getWeather' ? (
                         <Weather weatherAtLocation={result} />
                       ) : toolName === 'createDocument' ? (
                         <DocumentToolResult
@@ -101,7 +104,9 @@ export const PreviewMessage = ({
                         skeleton: ['getWeather'].includes(toolName),
                       })}
                     >
-                      {toolName === 'getWeather' ? (
+                      {toolName === 'getMenu' ? (
+                        <Menu />
+                      ) : toolName === 'getWeather' ? (
                         <Weather />
                       ) : toolName === 'createDocument' ? (
                         <DocumentToolCall type="create" args={args} />

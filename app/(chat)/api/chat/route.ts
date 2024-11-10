@@ -1,3 +1,4 @@
+import { openai } from '@ai-sdk/openai';
 import {
   convertToCoreMessages,
   Message,
@@ -29,13 +30,15 @@ import {
 
 import { generateTitleFromUserMessage } from '../../actions';
 
+
 export const maxDuration = 60;
 
 type AllowedTools =
   | 'createDocument'
   | 'updateDocument'
   | 'requestSuggestions'
-  | 'getWeather';
+  | 'getWeather'
+  | 'getMenu';
 
 const blocksTools: AllowedTools[] = [
   'createDocument',
@@ -44,8 +47,9 @@ const blocksTools: AllowedTools[] = [
 ];
 
 const weatherTools: AllowedTools[] = ['getWeather'];
+const menuTools: AllowedTools[] = ['getMenu'];
 
-const allTools: AllowedTools[] = [...blocksTools, ...weatherTools];
+const allTools: AllowedTools[] = [...blocksTools, ...weatherTools, ...menuTools];
 
 export async function POST(request: Request) {
   const {
@@ -96,6 +100,56 @@ export async function POST(request: Request) {
     maxSteps: 5,
     experimental_activeTools: allTools,
     tools: {
+      getMenu: {
+        description: 'Extract menu items from an uploaded image of a meal menu',
+        parameters: z.object({
+          imageContent: z.string().describe('The base64-encoded image content of the menu image'),
+        }),
+        execute: async ({ imageContent }) => {
+          const prompt = `
+            Please analyze the menu in the following base64-encoded image and convert the content to JSON with the following structure:
+            
+            {
+              "sections": [
+                {
+                  "title": "Section Title",
+                  "options": [
+                    { "course": "Course Name", "ingredients": "Ingredients (optional)" },
+                    ...
+                  ]
+                },
+                ...
+              ]
+            }
+            
+            Provide only the JSON data as output, without any additional text.
+            
+            Image data:
+            ${imageContent}
+          `;
+          
+          const { fullStream } = await streamText({
+            model: customModel('gpt-4'),
+            messages: [{ role: 'user', content: prompt }],
+          });
+      
+          let content = '';
+      
+          for await (const delta of fullStream) {
+            if (delta.type === 'text-delta') {
+              content += delta.textDelta;
+            }
+          }
+      
+          try {
+            const parsedData = JSON.parse(content.trim());
+            return parsedData;
+          } catch (e) {
+            console.error('Failed to parse JSON from GPT-4 response:', e);
+            return { error: 'Failed to parse JSON from GPT-4 response' };
+          }
+        },
+      },            
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({
