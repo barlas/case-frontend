@@ -104,32 +104,81 @@ export async function POST(request: Request) {
       getMenu: {
         description: 'Extract menu items from an uploaded image of a meal menu',
         parameters: z.object({
-          imageContent: z.string().describe('The base64-encoded image content of the menu image'),
+          imageUrl: z.string().describe('The URL of the menu image'),
         }),
-        execute: async ({ imageContent }) => {
+        execute: async ({ imageUrl }) => {
           console.log("Entering getMenu function");
       
           try {
-            // Check if imageContent is received
-            if (imageContent) {
-              console.log("Received base64 image content:", imageContent.slice(0, 50), "..."); // Log snippet for readability
-            } else {
-              console.warn("No image content received.");
-              return JSON.stringify({
-                error: "No image content provided. Please upload a valid image.",
-              });
-            }
+            if (imageUrl) {
+              console.log("Received image URL:", imageUrl);
       
-            // Temporarily returning success message after logging
-            return JSON.stringify({ message: "Image content received successfully" });
+              // Fetch the image data from the URL
+              const response = await fetch(imageUrl);
+              const arrayBuffer = await response.arrayBuffer();
+              const buffer = Buffer.from(arrayBuffer);
+              const base64Image = buffer.toString('base64');
+              const imageContent = `data:${response.headers.get('content-type')};base64,${base64Image}`;
+      
+              console.log("Image content fetched and converted to base64.");
+      
+              // Proceed with your existing logic using imageContent
+              const prompt = `
+                Please analyze the menu in the following base64-encoded image and convert the content to JSON with the following structure:
+      
+                {
+                  "sections": [
+                    {
+                      "title": "Section Title",
+                      "options": [
+                        { "course": "Course Name", "ingredients": "Ingredients (optional)" },
+                        ...
+                      ]
+                    },
+                    ...
+                  ]
+                }
+      
+                Provide only the JSON data as output, without any additional text.
+      
+                Image data:
+                ${imageContent}
+              `;
+      
+              const { fullStream } = await streamText({
+                model: customModel('gpt-4'),
+                messages: [{ role: 'user', content: prompt }],
+              });
+      
+              let content = '';
+      
+              for await (const delta of fullStream) {
+                if (delta.type === 'text-delta') {
+                  content += delta.textDelta;
+                }
+              }
+      
+              try {
+                const parsedData = JSON.parse(content.trim());
+                return parsedData;
+              } catch (e) {
+                console.error('Failed to parse JSON from GPT-4 response:', e);
+                return { error: 'Failed to parse JSON from GPT-4 response' };
+              }
+            } else {
+              console.warn("No image URL received.");
+              return {
+                error: "No image URL provided. Please upload a valid image.",
+              };
+            }
           } catch (error) {
             console.error("Error in getMenu function:", error);
-            return JSON.stringify({
+            return {
               error: "An error occurred in getMenu. Could not process the image.",
-            });
+            };
           }
         },
-      },              
+      },         
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({
