@@ -104,38 +104,32 @@ export async function POST(request: Request) {
       getMenu: {
         description: 'Extract menu items from an uploaded image of a meal menu',
         parameters: z.object({
-          menuId: z.string(),
+          imageContent: z.string().describe('The base64-encoded image content of the menu image'),
         }),
-        execute: async () => {
+        execute: async ({ imageContent }) => {
           console.log("Entering getMenu function");
       
           try {
-            // Mock result for testing
-            let resultText = "Sample menu data for testing purposes.";
-            console.log("Mock resultText:", resultText);
-      
-            // Ensure resultText is not null and is a string
-            if (!resultText || typeof resultText !== 'string') {
-              resultText = "Fallback menu content"; // Fallback if resultText is invalid
-              console.warn("resultText was null or not a string, using fallback content.");
+            // Check if imageContent is received
+            if (imageContent) {
+              console.log("Received base64 image content:", imageContent.slice(0, 50), "..."); // Log snippet for readability
+            } else {
+              console.warn("No image content received.");
+              return JSON.stringify({
+                error: "No image content provided. Please upload a valid image.",
+              });
             }
       
-            // Ensure JSON output is a string
-            const output = JSON.stringify(SAMPLE);
-            if (!output || typeof output !== 'string') {
-              console.warn("Output is null or not a string, using fallback JSON.");
-              return JSON.stringify({ error: "Fallback JSON content" });
-            }
-      
-            return output;
+            // Temporarily returning success message after logging
+            return JSON.stringify({ message: "Image content received successfully" });
           } catch (error) {
             console.error("Error in getMenu function:", error);
             return JSON.stringify({
-              error: "An error occurred in getMenu. Fallback content provided.",
+              error: "An error occurred in getMenu. Could not process the image.",
             });
           }
         },
-      },
+      },              
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({
