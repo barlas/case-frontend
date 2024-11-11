@@ -91,7 +91,11 @@ export async function POST(request: Request) {
           description: z.string(),
         }),
         execute: async ({ description }) => {
-          console.log("Entering getMenu function");          
+          console.log("Entering getMenu function");
+          if (messages && messages[0].experimental_attachments && messages[0].experimental_attachments[0]) {
+            console.log(messages[0].experimental_attachments[0].url);
+          }
+
           let content: string = '';
           const { fullStream } = await streamText({
             model: customModel(model.apiIdentifier),
@@ -109,6 +113,7 @@ export async function POST(request: Request) {
                   ...
                 ]
               }
+              Use only the language which they used in the prompt.
               Provide only the JSON data as output, without any additional text.
               `,
             prompt: description,
