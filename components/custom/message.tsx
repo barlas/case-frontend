@@ -25,6 +25,12 @@ export const PreviewMessage = ({
   vote: Vote | undefined;
   isLoading: boolean;
 }) => {
+
+
+  if (message.experimental_attachments) {
+    console.log("BARLAS 2", message.experimental_attachments);
+  }
+
   return (
     <motion.div
       className="w-full mx-auto max-w-3xl px-4 group/message"
@@ -60,10 +66,9 @@ export const PreviewMessage = ({
 
                   return (
                     <div key={toolCallId}>
-                      {/* {toolName === 'getMenu' ? (
+                      {toolName === 'getMenu' ? (
                         <Menu menu={result} />
-                      ) : toolName === 'getWeather' ? ( */}
-                      {toolName === 'getWeather' ? (
+                      ) : toolName === 'getWeather' ? (
                         <Weather weatherAtLocation={result} />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>

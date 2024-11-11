@@ -10,6 +10,7 @@ import { customModel } from '@/ai';
 import { models } from '@/ai/models';
 import { systemPrompt } from '@/ai/prompts';
 import { auth } from '@/app/(auth)/auth';
+import { SAMPLE } from '@/components/custom/menu';
 import {
   deleteChatById,
   getChatById,
@@ -24,17 +25,16 @@ import {
 
 import { generateTitleFromUserMessage } from '../../actions';
 
-
 export const maxDuration = 60;
 
 type AllowedTools =
-  | 'getWeather';
-  // | 'getMenu';
+  | 'getWeather'
+  | 'getMenu';
 
 const weatherTools: AllowedTools[] = ['getWeather'];
-// const menuTools: AllowedTools[] = ['getMenu'];
+const menuTools: AllowedTools[] = ['getMenu'];
 
-const allTools: AllowedTools[] = [...weatherTools/*, ...menuTools*/];
+const allTools: AllowedTools[] = [...weatherTools, ...menuTools];
 
 export async function POST(request: Request) {
   const {
@@ -85,86 +85,58 @@ export async function POST(request: Request) {
     maxSteps: 5,
     experimental_activeTools: allTools,
     tools: {
-      /*
       getMenu: {
-        description: 'Extract menu items from an uploaded image of a meal menu',
+        description: 'Extract menu items of a meal menu',
         parameters: z.object({
-          imageUrl: z.string().describe('The URL of the menu image'),
+          description: z.string(),
         }),
-        execute: async ({ imageUrl }) => {
-          console.log("Entering getMenu function");
-          try {
-            if (imageUrl) {
-              console.log("Received image URL:", imageUrl);
-      
-              // Fetch the image data from the URL
-              const response = await fetch(imageUrl);
-              const arrayBuffer = await response.arrayBuffer();
-              const buffer = Buffer.from(arrayBuffer);
-              const base64Image = buffer.toString('base64');
-              const imageContent = `data:${response.headers.get('content-type')};base64,${base64Image}`;
-      
-              console.log("Image content fetched and converted to base64.");
-      
-              // Proceed with your existing logic using imageContent
-              const prompt = `
-                Please analyze the menu and convert the content to JSON with the following structure:
-        
-                {
-                  "sections": [
-                    {
-                      "title": "Section Title",
-                      "options": [
-                        { "course": "Course Name", "ingredients": "Ingredients (optional)" },
-                        ...
-                      ]
-                    },
-                    ...
-                  ]
-                }
-        
-                Provide only the JSON data as output, without any additional text.
-                Don't include ingredients if it doesn't exists.
-      
-                Image data:
-                ${imageContent}
-              `;
-      
-              const { fullStream } = await streamText({
-                model: customModel('gpt-4'),
-                messages: [{ role: 'user', content: prompt }],
+        execute: async ({ description }) => {
+          console.log("Entering getMenu function");          
+          let content: string = '';
+          const { fullStream } = await streamText({
+            model: customModel(model.apiIdentifier),
+            system: `
+              Please analyze the menu and convert the content to JSON with the following structure:
+              {
+                "sections": [
+                  {
+                    "title": "Section Title",
+                    "options": [
+                      { "course": "Course Name", "ingredients": "Ingredients (Optional! Don't include if it doesn't exists)" },
+                      ...
+                    ]
+                  },
+                  ...
+                ]
+              }
+              Provide only the JSON data as output, without any additional text.
+              `,
+            prompt: description,
+          });
+
+          for await (const delta of fullStream) {
+            const { type } = delta;
+
+            if (type === 'text-delta') {
+              const { textDelta } = delta;
+
+              content += textDelta;
+              streamingData.append({
+                type: 'text-delta',
+                content: textDelta,
               });
-      
-              let content = '';
-      
-              for await (const delta of fullStream) {
-                if (delta.type === 'text-delta') {
-                  content += delta.textDelta;
-                }
-              }
-      
-              try {
-                const parsedData = JSON.parse(content.trim());
-                return parsedData;
-              } catch (e) {
-                console.error('Failed to parse JSON from GPT-4 response:', e);
-                return { error: 'Failed to parse JSON from GPT-4 response' };
-              }
-            } else {
-              console.warn("No image URL received.");
-              return {
-                error: "No image URL provided. Please upload a valid image.",
-              };
             }
-          } catch (error) {
-            console.error("Error in getMenu function:", error);
-            return {
-              error: "An error occurred in getMenu. Could not process the image.",
-            };
+          }
+
+          streamingData.append({ type: 'finish', content: '' });
+          if (content) {
+            const parsedData = JSON.parse(content.trim());
+            return parsedData;
+          } else {
+            return JSON.stringify(SAMPLE);
           }
         },
       },
-      */
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({

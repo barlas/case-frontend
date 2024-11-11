@@ -54,6 +54,7 @@ export function Chat({
     useScrollToBottom<HTMLDivElement>();
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
+  console.log("BARLAS 1", attachments);
 
   return (
     <>
