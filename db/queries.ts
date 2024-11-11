@@ -1,20 +1,17 @@
 'server-only';
 
 import { genSaltSync, hashSync } from 'bcrypt-ts';
-import { and, asc, desc, eq, gt } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
 import {
-  user,
   chat,
-  User,
-  document,
-  Suggestion,
-  suggestion,
   Message,
   message,
-  vote,
+  user,
+  User,
+  vote
 } from './schema';
 
 // Optionally, if not using email/pass login, you can
@@ -161,24 +158,6 @@ export async function getVotesByChatId({ id }: { id: string }) {
     return await db.select().from(vote).where(eq(vote.chatId, id));
   } catch (error) {
     console.error('Failed to get votes by chat id from database', error);
-    throw error;
-  }
-}
-
-export async function getSuggestionsByDocumentId({
-  documentId,
-}: {
-  documentId: string;
-}) {
-  try {
-    return await db
-      .select()
-      .from(suggestion)
-      .where(and(eq(suggestion.documentId, documentId)));
-  } catch (error) {
-    console.error(
-      'Failed to get suggestions by document version from database'
-    );
     throw error;
   }
 }

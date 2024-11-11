@@ -1,14 +1,11 @@
 import { JSONValue } from 'ai';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useSWRConfig } from 'swr';
-
-import { Suggestion } from '@/db/schema';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 import { UIBlock } from './block';
 
 type StreamingDelta = {
-  type: 'text-delta' | 'title' | 'id' | 'suggestion' | 'clear' | 'finish';
-  content: string | Suggestion;
+  type: 'text-delta' | 'title' | 'id' | 'clear' | 'finish';
+  content: string;
 };
 
 export function useBlockStream({
@@ -18,18 +15,6 @@ export function useBlockStream({
   streamingData: JSONValue[] | undefined;
   setBlock: Dispatch<SetStateAction<UIBlock>>;
 }) {
-  const { mutate } = useSWRConfig();
-  const [optimisticSuggestions, setOptimisticSuggestions] = useState<
-    Array<Suggestion>
-  >([]);
-
-  useEffect(() => {
-    if (optimisticSuggestions && optimisticSuggestions.length > 0) {
-      const [optimisticSuggestion] = optimisticSuggestions;
-      const url = `/api/suggestions?documentId=${optimisticSuggestion.documentId}`;
-      mutate(url, optimisticSuggestions, false);
-    }
-  }, [optimisticSuggestions, mutate]);
 
   useEffect(() => {
     const mostRecentDelta = streamingData?.at(-1);
@@ -63,16 +48,6 @@ export function useBlockStream({
                 : draftBlock.isVisible,
             status: 'streaming',
           };
-
-        case 'suggestion':
-          setTimeout(() => {
-            setOptimisticSuggestions((currentSuggestions) => [
-              ...currentSuggestions,
-              delta.content as Suggestion,
-            ]);
-          }, 0);
-
-          return draftBlock;
 
         case 'clear':
           return {

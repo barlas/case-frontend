@@ -59,4 +59,4 @@ pnpm dev
 
 Your app template should now be running on [localhost:3000](http://localhost:3000/).
 
-`repopack --ignore "pnpm-lock.yaml,README.md,LICENSE,node_modules,vercel,.env.local,.next"`
+`repopack --ignore "pnpm-lock.yaml,README.md,LICENSE,node_modules,vercel,.env.local,.next,lib"`

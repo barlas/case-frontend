@@ -8,7 +8,7 @@ import {
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { Message as DBMessage, Document } from '@/db/schema';
+import { Message as DBMessage } from '@/db/schema';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -201,16 +201,6 @@ export function sanitizeUIMessages(messages: Array<Message>): Array<Message> {
 export function getMostRecentUserMessage(messages: Array<CoreMessage>) {
   const userMessages = messages.filter((message) => message.role === 'user');
   return userMessages.at(-1);
-}
-
-export function getDocumentTimestampByIndex(
-  documents: Array<Document>,
-  index: number
-) {
-  if (!documents) return new Date();
-  if (index > documents.length) return new Date();
-
-  return documents[index].createdAt;
 }
 
 export function getMessageIdFromAnnotations(message: Message) {
