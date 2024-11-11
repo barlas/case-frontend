@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { Vote } from '@/db/schema';
 
-import { UIBlock } from './block';
 import { SparklesIcon } from './icons';
 import { Markdown } from './markdown';
 import { Menu } from './menu';
@@ -18,15 +17,11 @@ import { Weather } from './weather';
 export const PreviewMessage = ({
   chatId,
   message,
-  block,
-  setBlock,
   vote,
   isLoading,
 }: {
   chatId: string;
   message: Message;
-  block: UIBlock;
-  setBlock: Dispatch<SetStateAction<UIBlock>>;
   vote: Vote | undefined;
   isLoading: boolean;
 }) => {
