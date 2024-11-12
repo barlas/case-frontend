@@ -15,16 +15,16 @@ export const SAMPLE = {
     {
       title: "Main Selection",
       options: [
-        { course: "HUMUS", ingredients: "Chickpeas, tahini, olive oil" },
-        { course: "GARDEN FRESH SALAD", ingredients: "Mixed greens, vinaigrette" },
-        { course: "BEEF STROGANOFF", ingredients: "Beef, mushrooms, creamy sauce" },
+        { course: "...", ingredients: "..." },
+        { course: "...", ingredients: "..." },
+        { course: "...", ingredients: "..." },
       ],
     },
     {
       title: "Before Landing",
       options: [
-        { course: "SEASONAL FRESH FRUITS", ingredients: "Assorted seasonal fruits" },
-        { course: "OMELETTE", ingredients: "Eggs, cheese, sautéed vegetables" },
+        { course: "...", ingredients: "..." },
+        { course: "...", ingredients: "..." },
       ],
     },
   ],

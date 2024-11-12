@@ -2,6 +2,7 @@ import {
   convertToCoreMessages,
   Message,
   StreamData,
+  streamObject,
   streamText
 } from 'ai';
 import { z } from 'zod';
@@ -10,7 +11,6 @@ import { customModel } from '@/ai';
 import { models } from '@/ai/models';
 import { systemPrompt } from '@/ai/prompts';
 import { auth } from '@/app/(auth)/auth';
-import { SAMPLE } from '@/components/custom/menu';
 import {
   deleteChatById,
   getChatById,
@@ -92,56 +92,48 @@ export async function POST(request: Request) {
         }),
         execute: async ({ description }) => {
           console.log("Entering getMenu function");
-          if (messages && messages[0].experimental_attachments && messages[0].experimental_attachments[0]) {
-            console.log(messages[0].experimental_attachments[0].url);
-          }
-
-          let content: string = '';
-          const { fullStream } = await streamText({
-            model: customModel(model.apiIdentifier),
-            system: `
-              Please analyze the menu and convert the content to JSON with the following structure:
-              {
-                "sections": [
-                  {
-                    "title": "Section Title",
-                    "options": [
-                      { "course": "Course Name", "ingredients": "Ingredients (Optional! Don't include if it doesn't exists)" },
-                      ...
-                    ]
-                  },
-                  ...
-                ]
-              }
-              Use only the language which they used in the prompt.
-              Provide only the JSON data as output, without any additional text.
-              `,
-            prompt: description,
+      
+          // The schema for the expected JSON structure
+          const schema = z.object({
+            sections: z.array(
+              z.object({
+                title: z.string(),
+                options: z.array(
+                  z.object({
+                    course: z.string(),
+                    ingredients: z.string().optional(),
+                  })
+                ),
+              })
+            ),
           });
-
-          for await (const delta of fullStream) {
-            const { type } = delta;
-
-            if (type === 'text-delta') {
-              const { textDelta } = delta;
-
-              content += textDelta;
-              streamingData.append({
-                type: 'text-delta',
-                content: textDelta,
-              });
-            }
+      
+          // streamObject to generate and stream the JSON object
+          const { textStream, object } = await streamObject({
+            model: customModel(model.apiIdentifier),
+            system: ``,
+            prompt: description,
+            output: 'object',
+            schema: schema,
+          });
+      
+          // Stream the JSON text to the client
+          for await (const textChunk of textStream) {
+            streamingData.append({
+              type: 'text-delta',
+              content: textChunk,
+            });
           }
-
+      
+          // Indicate that the streaming is finished
           streamingData.append({ type: 'finish', content: '' });
-          if (content) {
-            const parsedData = JSON.parse(content.trim());
-            return parsedData;
-          } else {
-            return JSON.stringify(SAMPLE);
-          }
+      
+          // Get the final parsed object
+          const parsedData = await object;
+      
+          return parsedData;
         },
-      },
+      },      
       getWeather: {
         description: 'Get the current weather at a location',
         parameters: z.object({
@@ -163,6 +155,8 @@ export async function POST(request: Request) {
         try {
           const responseMessagesWithoutIncompleteToolCalls =
             sanitizeResponseMessages(responseMessages);
+          
+          console.log('Response Messages:', responseMessagesWithoutIncompleteToolCalls);
 
           await saveMessages({
             messages: responseMessagesWithoutIncompleteToolCalls.map(
@@ -193,7 +187,7 @@ export async function POST(request: Request) {
       streamingData.close();
     },
     experimental_telemetry: {
-      isEnabled: true,
+      isEnabled: false,
       functionId: 'stream-text',
     },
   });
