@@ -95,21 +95,22 @@ export async function POST(request: Request) {
           console.log(content);
 
           const schema = z.object({
-            courses: z.array(
+            mealServices: z.array(
               z.object({
-                title: z.string(),
-                description: z.string(),
-                options: z.array(
+                mealServiceType: z.string(),
+                selectionOptions: z.array(
                   z.array(
                     z.object({
-                      dish: z.string(),
+                      selectionGuidanceText: z.string().optional(),
+                      dishName: z.string(),
                       ingredients: z.string().optional(),
+                      separatorAndOr: z.string().optional(),
                     })
                   )
                 ),
               })
             ),
-            disclaimer: z.string(),
+            footerDisclaimer: z.string(),
             isBusiness: z.boolean(),
           });
           
@@ -137,7 +138,7 @@ export async function POST(request: Request) {
           const parsedData = await object;
           return parsedData;
         },
-      },      
+      },
       getWeather: {
         description: 'Get the current weather at a city',
         parameters: z.object({

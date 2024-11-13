@@ -3,33 +3,31 @@
 import { useState } from 'react';
 
 interface Menu {
-  courses: {
-    title: string;
-    description: string;
-    options: {
-      dish: string;
+  mealServices: {
+    mealServiceType: string;
+    selectionOptions: {
+      selectionGuidanceText?: string;
+      dishName: string;
       ingredients?: string;
+      separatorAndOr?: string;
     }[][];
   }[];
-  disclaimer: string;
+  footerDisclaimer: string;
   isBusiness: boolean;
 }
 
 export const SAMPLE: Menu = {
-  courses: [
+  mealServices: [
     {
-      title: "...",
-      description: "...",
-      options: [
+      mealServiceType: "...",
+      selectionOptions: [
         [
-          { dish: "...", ingredients: "..." },
-          { dish: "...", ingredients: "..." },
-          { dish: "...", ingredients: "..." },
+          { dishName: "..." },
         ]
       ],
     },
   ],
-  disclaimer: "...",
+  footerDisclaimer: "...",
   isBusiness: false
 };
 
@@ -38,14 +36,11 @@ export function Menu({
 }: {
   menu?: Menu;
 }) {
-  // Ensure menu has a default structure if it's undefined
-  const safeMenu = menu && menu.courses ? menu : { courses: [] };
+  const safeMenu = menu && menu.mealServices ? menu : { mealServices: [] };
 
-  // State to keep track of the active course (tab)
   const [activeCourseIndex, setActiveCourseIndex] = useState(0);
 
-  // Check if there are multiple courses to determine if tabs are needed
-  const hasMultipleCourses = safeMenu.courses.length > 1;
+  const hasMultipleCourses = safeMenu.mealServices.length > 1;
 
   return (
     <div className="bg-card p-6 rounded-lg shadow-lg">
@@ -53,41 +48,45 @@ export function Menu({
 
       {hasMultipleCourses && (
         <div className="tabs mb-4">
-          {safeMenu.courses.map((course, idx) => (
+          {safeMenu.mealServices.map((meal, idx) => (
             <button
               key={idx}
               className={`tab ${idx === activeCourseIndex ? 'active' : ''}`}
               onClick={() => setActiveCourseIndex(idx)}
             >
-              {course.title}
+              {meal.mealServiceType}
             </button>
           ))}
         </div>
       )}
 
-      {/* Display content based on the active course */}
       <div>
-        {safeMenu.courses.map((course, idx) => {
+        {safeMenu.mealServices.map((meal, idx) => {
           // Only render the active course if tabs are present
           if (hasMultipleCourses && idx !== activeCourseIndex) return null;
 
           return (
             <div key={idx} className="mb-6">
-              {/* Only display the course title if there are no tabs */}
+              {/* Only display the meal title if there are no tabs */}
               {!hasMultipleCourses && (
                 <h3 className="text-xl font-semibold mb-2">
-                  {course.title}
+                  {meal.mealServiceType}
                 </h3>
               )}
-              <p className="italic mb-2">{course.description}</p>
 
-              {course.options.map((optionGroup, groupIdx) => (
+              {meal.selectionOptions.map((optionGroup, groupIdx) => (
                 <div key={groupIdx}>
                   <ul className="mb-2">
                     {optionGroup.map((item, itemIdx) => (
                       <li key={itemIdx} className="mb-1">
+                        {item.selectionGuidanceText && (
+                          <span className="italic mb-2">{item.selectionGuidanceText}<br /></span>
+                        )}
+                        {item.separatorAndOr && (
+                          <span>{item.separatorAndOr}<br /></span>
+                        )}
                         <span className={`font-${menu.isBusiness ? 'bold' : 'medium'}`}>
-                          {item.dish.toUpperCase()}
+                          {item.dishName.toUpperCase()}
                         </span>
                         {item.ingredients && (
                           <span>: {item.ingredients}</span>
@@ -95,10 +94,6 @@ export function Menu({
                       </li>
                     ))}
                   </ul>
-                  {/* Add "or" between primary and alternative options */}
-                  {groupIdx === 0 && course.options.length > 1 && (
-                    <p className="text-center font-semibold my-2">or</p>
-                  )}
                 </div>
               ))}
             </div>
@@ -107,7 +102,7 @@ export function Menu({
       </div>
 
       <div className="bg-accent p-4 mt-4 rounded-md text-center font-bold">
-        {menu.disclaimer ?? null}
+        {menu.footerDisclaimer ?? null}
       </div>
     </div>
   );
