@@ -25,13 +25,13 @@ import { Textarea } from '../ui/textarea';
 const suggestedActions = [
   {
     title: 'What is the weather',
-    label: 'in San Francisco?',
-    action: 'What is the weather in San Francisco?',
+    label: 'at my destination??',
+    action: 'What is the weather at my destination?',
   },
   {
-    title: 'Help me draft an essay',
-    label: 'about Silicon Valley',
-    action: 'Help me draft a short essay about Silicon Valley',
+    title: 'What are the gluten-free',
+    label: 'options on the menu?',
+    action: 'What are the gluten-free options on the menu?',
   },
 ];
 

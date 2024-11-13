@@ -86,33 +86,38 @@ export async function POST(request: Request) {
     experimental_activeTools: allTools,
     tools: {
       getMenu: {
-        description: 'Extract menu items of a meal menu',
+        description: 'Request information on dietary options for meal menu items',
         parameters: z.object({
-          description: z.string(),
+          content: z.string().describe('The whole content of the menu.'),
         }),
-        execute: async ({ description }) => {
+        execute: async ({ content }) => {
           console.log("Entering getMenu function");
-      
-          // The schema for the expected JSON structure
+          console.log(content);
+
           const schema = z.object({
-            sections: z.array(
+            courses: z.array(
               z.object({
                 title: z.string(),
+                description: z.string(),
                 options: z.array(
-                  z.object({
-                    course: z.string(),
-                    ingredients: z.string().optional(),
-                  })
+                  z.array(
+                    z.object({
+                      dish: z.string(),
+                      ingredients: z.string().optional(),
+                    })
+                  )
                 ),
               })
             ),
+            disclaimer: z.string(),
+            isBusiness: z.boolean(),
           });
-      
+          
           // streamObject to generate and stream the JSON object
           const { textStream, object } = await streamObject({
             model: customModel(model.apiIdentifier),
-            system: ``,
-            prompt: description,
+            system: `You are a helpful in-flight assistant. Based on the description, please provide information.`,
+            prompt: content,
             output: 'object',
             schema: schema,
           });
@@ -130,12 +135,11 @@ export async function POST(request: Request) {
       
           // Get the final parsed object
           const parsedData = await object;
-      
           return parsedData;
         },
       },      
       getWeather: {
-        description: 'Get the current weather at a location',
+        description: 'Get the current weather at a city',
         parameters: z.object({
           latitude: z.number(),
           longitude: z.number(),
