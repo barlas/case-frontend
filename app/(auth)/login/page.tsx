@@ -3,15 +3,19 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { AuthForm } from '@/components/custom/auth-form';
 import { SubmitButton } from '@/components/custom/submit-button';
+import { useLocale } from '@/hooks/use-locale';
 
 import { login, LoginActionState } from '../actions';
 
 export default function Page() {
+  const { t } = useTranslation();
   const router = useRouter();
+  const locale = useLocale();
 
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
@@ -45,7 +49,7 @@ export default function Page() {
         <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
           <h3 className="text-xl font-semibold dark:text-zinc-50">Sign In</h3>
           <p className="text-sm text-gray-500 dark:text-zinc-400">
-            Use your email and password to sign in
+            {t('signInPrompt')}
           </p>
         </div>
         <AuthForm action={handleSubmit} defaultEmail={email}>
@@ -53,7 +57,7 @@ export default function Page() {
           <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
             {"Don't have an account? "}
             <Link
-              href="/register"
+              href={`/${locale}/register`}
               className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
             >
               Sign up

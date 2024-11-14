@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { Toaster } from 'sonner';
 
+import { ClientLayout } from '@/components/custom/client-layout';
 import { ThemeProvider } from '@/components/custom/theme-provider';
 
 import './globals.css';
@@ -63,8 +63,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster position="top-center" />
-          {children}
+          <ClientLayout>
+            {children}
+          </ClientLayout>
         </ThemeProvider>
       </body>
     </html>

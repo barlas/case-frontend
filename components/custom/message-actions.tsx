@@ -62,7 +62,7 @@ export function MessageActions({
               onClick={async () => {
                 const messageId = getMessageIdFromAnnotations(message);
 
-                const upvote = fetch('/api/vote', {
+                const upvote = fetch(`/api/vote`, {
                   method: 'PATCH',
                   body: JSON.stringify({
                     chatId,
@@ -116,7 +116,7 @@ export function MessageActions({
               onClick={async () => {
                 const messageId = getMessageIdFromAnnotations(message);
 
-                const downvote = fetch('/api/vote', {
+                const downvote = fetch(`/api/vote`, {
                   method: 'PATCH',
                   body: JSON.stringify({
                     chatId,

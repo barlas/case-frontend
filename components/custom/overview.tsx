@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { MessageIcon } from './icons';
 
 export const Overview = () => {
+  const { t } = useTranslation();
   return (
     <motion.div
       key="overview"
@@ -18,7 +19,7 @@ export const Overview = () => {
           <MessageIcon size={32} />
         </p>
         <p>
-          Welcome to Turkish Airlines in-flight assistant!
+          {t('welcome')}
         </p>
       </div>
     </motion.div>
