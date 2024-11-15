@@ -40,32 +40,32 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-dvh">
-      <div className="min-h-dvh bg-black/40 backdrop-blur-sm">
+    <div className="min-h-dvh bg-background">
+      <div className="min-h-dvh">
         <div className="container mx-auto flex min-h-dvh flex-col items-center justify-center px-4">
-          <div className="fixed inset-x-0 top-0 flex items-center justify-between bg-black/20 px-6 py-4 backdrop-blur-sm">
+          <div className="fixed inset-x-0 top-0 flex items-center justify-between border-b bg-background/95 px-6 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex items-center gap-2">
               <TurkishAirlinesLogo />
             </div>
             <div className="flex items-center gap-2">
               <ThemeSelector />
-              <LanguageSelector className="border-none bg-white/10 text-white hover:bg-white/20" />
+              <LanguageSelector className="border bg-background hover:bg-accent" />
             </div>
           </div>
 
-          <div className="w-full max-w-md rounded-2xl bg-white/10 p-8 backdrop-blur-md">
+          <div className="w-full max-w-md rounded-lg border bg-card p-8 shadow-sm">
             <div className="mb-8 text-center">
-              <h1 className="mb-2 text-2xl font-bold text-white">{t('login.form.signIn')}</h1>
-              <p className="text-sm text-gray-300">{t('login.form.signInTitle')}</p>
+              <h1 className="mb-2 text-2xl font-bold text-foreground">{t('login.form.signIn')}</h1>
+              <p className="text-sm text-muted-foreground">{t('login.form.signInTitle')}</p>
             </div>
             <AuthForm action={handleSubmit} defaultEmail={email}>
               <SubmitButton isSuccessful={isSuccessful}>
                 {t('login.form.signIn')}
               </SubmitButton>
 
-              <p className="mt-4 text-center text-sm text-gray-300">
-                {t('login.form.signUpPrompt')}
-                <Link href="/register" className="font-semibold text-white hover:text-[#E81932]">
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                {t('login.form.signUpPrompt')}{' '}
+                <Link href="/register" className="font-semibold text-primary hover:text-primary/90">
                   {t('login.form.signUpCta')}
                 </Link>
                 {t('login.form.signInCtaContent')}
