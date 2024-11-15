@@ -12,6 +12,7 @@ import React, {
   SetStateAction,
   ChangeEvent,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
@@ -21,19 +22,6 @@ import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-
-const suggestedActions = [
-  {
-    title: 'What is the weather',
-    label: 'at my destination??',
-    action: 'What is the weather at my destination?',
-  },
-  {
-    title: 'What are the gluten-free',
-    label: 'options on the menu?',
-    action: 'What are the gluten-free options on the menu?',
-  },
-];
 
 export function MultimodalInput({
   chatId,
@@ -70,8 +58,22 @@ export function MultimodalInput({
   ) => void;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
+
+  const suggestedActions = [
+    {
+      title: t('chat.suggestions.weather.title'),
+      label: t('chat.suggestions.weather.label'),
+      action: t('chat.suggestions.weather.action'),
+    },
+    {
+      title: t('chat.suggestions.gluten.title'),
+      label: t('chat.suggestions.gluten.label'),
+      action: t('chat.suggestions.gluten.action'),
+    },
+  ];
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -209,10 +211,10 @@ export function MultimodalInput({
                       content: suggestedAction.action,
                     });
                   }}
-                  className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
+                  className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start group"
                 >
                   <span className="font-medium">{suggestedAction.title}</span>
-                  <span className="text-muted-foreground">
+                  <span className="text-muted-foreground group-hover:text-white transition-colors duration-200">
                     {suggestedAction.label}
                   </span>
                 </Button>
@@ -252,7 +254,7 @@ export function MultimodalInput({
 
       <Textarea
         ref={textareaRef}
-        placeholder="Send a message..."
+        placeholder={t('chat.input.placeholder')}
         value={input}
         onChange={handleInput}
         className={cx(

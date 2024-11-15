@@ -15,7 +15,11 @@ i18n
     },
     lng: 'en',
     fallbackLng: 'en',
-    interpolation: { escapeValue: false },
+    interpolation: { 
+      escapeValue: false,
+      prefix: '{',
+      suffix: '}'
+    },
     ns: ['common'],
     defaultNS: 'common'
   });

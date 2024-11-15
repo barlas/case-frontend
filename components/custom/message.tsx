@@ -3,7 +3,7 @@
 import { Message } from 'ai';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Vote } from '@/db/schema';
 
@@ -114,6 +114,7 @@ export const PreviewMessage = ({
 };
 
 export const ThinkingMessage = () => {
+  const { t } = useTranslation();
   const role = 'assistant';
 
   return (
@@ -137,7 +138,7 @@ export const ThinkingMessage = () => {
 
         <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-col gap-4 text-muted-foreground">
-            Thinking...
+            {t('chat.thinking')}
           </div>
         </div>
       </div>

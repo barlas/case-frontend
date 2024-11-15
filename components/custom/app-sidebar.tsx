@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type User } from 'next-auth';
+import { useTranslation } from 'react-i18next';
 
-import { PlusIcon } from '@/components/custom/icons';
+import { PlusIcon, TurkishAirlinesLogo } from '@/components/custom/icons';
 import { SidebarHistory } from '@/components/custom/sidebar-history';
 import { SidebarUserNav } from '@/components/custom/sidebar-user-nav';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import { BetterTooltip } from '@/components/ui/tooltip';
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
-
+  const { t } = useTranslation();
   return (
     <Sidebar className="group-data-[side=left]:border-r-0">
       <SidebarHeader>
@@ -37,11 +37,9 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               }}
               className="flex flex-row gap-3 items-center"
             >
-              <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
-              </span>
+              <TurkishAirlinesLogo />
             </div>
-            <BetterTooltip content="New Chat" align="start">
+            <BetterTooltip content={t('common.newChat')} align="start">
               <Button
                 variant="ghost"
                 className="p-2 h-fit"
