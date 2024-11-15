@@ -335,11 +335,17 @@ export const CheckCirclFillIcon = ({ size = 16 }: { size?: number }) => {
 };
 
 export const TurkishAirlinesLogo = () => {
-  const [fillColor, setFillColor] = useState('#fff');
-  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, systemTheme } = useTheme();
+
   useEffect(() => {
-    setFillColor(theme === 'dark' ? '#fff' : '#000');
-  }, [theme]);
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+  const fillColor = currentTheme === 'dark' ? '#fff' : '#000';
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
