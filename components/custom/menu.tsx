@@ -31,10 +31,6 @@ export const SAMPLE: Menu = {
   isBusiness: false
 };
 
-interface MenuProps {
-  onTabChange: () => void;
-}
-
 export function Menu({
   menu = SAMPLE,
 }: {
@@ -57,10 +53,7 @@ export function Menu({
               key={idx}
               type="button"
               className={`tab ${idx === activeCourseIndex ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveCourseIndex(idx);
-              }}
+              onClick={() => setActiveCourseIndex(idx)}
             >
               {meal.mealServiceType}
             </button>
