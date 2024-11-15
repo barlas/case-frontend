@@ -1,4 +1,21 @@
 {
-    "welcome": "Hosgeldiniz!",
-    "signInPrompt": "E-posta ve şifrenizi kullanarak oturum açın"
+    "login.form.signUp": "Kayıt olun",
+    "login.form.signIn": "Oturum açın",
+    "login.form.signInTitle": "E-posta ve şifrenizi kullanarak oturum açın",
+    "login.form.signUpTitle": "E-posta ve şifrenizi kullanarak hesap oluşturun",
+    "login.form.email": "E-posta Adresi",
+    "login.form.password": "Şifre",
+    "login.form.signUpPrompt": "Hesabınız yok mu? ",
+    "login.form.signUpCta": " Űcretsiz olarak",
+    "login.form.signUpCtaContent": " kayıt olun.",
+    "login.form.signInPrompt": "Zaten bir hesabınız var mı? ",
+    "login.form.signInCta": "Oturum",
+    "login.form.signInCtaContent": "  açın.",
+    "register.error.userExists": "Hesap zaten mevcut",
+    "register.error.failed": "Hesap oluşturulamadı",
+    "register.error.invalidData": "Gönderdiğiniz verileri doğrulama hatası!",
+    "register.success": "Hesap başarıyla oluşturuldu",
+    "login.error.invalidCredentials": "Geçersiz kimlik bilgileri!",
+    "login.error.invalidData": "Gönderdiğiniz verileri doğrulama hatası!",
+    "welcome": "Hosgeldiniz!"
 }

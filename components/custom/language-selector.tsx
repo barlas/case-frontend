@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, startTransition } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { Button } from '@/components/ui/button';
@@ -22,12 +22,17 @@ const languages = [
 export function LanguageSelector({
   className,
 }: React.ComponentProps<typeof Button>) {
-  const [open, setOpen] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const [locale, setLocale] = useLocalStorage('locale', 'en');
+
   const selectedLanguage = useMemo(
     () => languages.find((lang) => lang.id === locale),
     [locale]
   );
+
+  useEffect(() => {
+    setHasHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (i18n.language !== locale) {
@@ -35,8 +40,13 @@ export function LanguageSelector({
     }
   }, [locale]);
 
+  if (!hasHydrated) {
+    // Defer rendering until after hydration
+    return null;
+  }
+
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger
         asChild
         className={`w-fit data-[state=open]:bg-accent data-[state=open]:text-accent-foreground ${className}`}
@@ -51,10 +61,7 @@ export function LanguageSelector({
           <DropdownMenuItem
             key={lang.id}
             onSelect={() => {
-              setOpen(false);
-              startTransition(() => {
-                setLocale(lang.id);
-              });
+              setLocale(lang.id);
             }}
             className="gap-4 group/item flex flex-row justify-between items-center"
             data-active={lang.id === locale}

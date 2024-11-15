@@ -1,10 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
 
-import { ModelSelector } from '@/components/custom/model-selector';
 import { SidebarToggle } from '@/components/custom/sidebar-toggle';
 import { Button } from '@/components/ui/button';
 import { BetterTooltip } from '@/components/ui/tooltip';
@@ -37,10 +35,6 @@ export function ChatHeader({ selectedModelId }: { selectedModelId: string }) {
           </Button>
         </BetterTooltip>
       )}
-      <ModelSelector
-        selectedModelId={selectedModelId}
-        className="order-1 md:order-2"
-      />
       <LanguageSelector
         className="order-1 md:order-2"
       />

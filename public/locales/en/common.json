@@ -1,4 +1,21 @@
 {
-    "welcome": "Welcome to Turkish Airlines in-flight assistant!",
-    "signInPrompt": "BARLAS Use your email and password to sign in"
+    "login.form.signUp": "Sign up",
+    "login.form.signIn": "Sign in",
+    "login.form.signInTitle": "Use your email and password to sign in",
+    "login.form.signUpTitle": "E-posta ve şifrenizi kullanarak hesap oluşturun",
+    "login.form.email": "Email Address",
+    "login.form.password": "Password",
+    "login.form.signUpPrompt": "Don't have an account? ",
+    "login.form.signUpCta": "Sign up",
+    "login.form.signUpCtaContent": " for free.",
+    "login.form.signInPrompt": "Already have an account? ",
+    "login.form.signInCta": "Sign in",
+    "login.form.signInCtaContent": " instead.",
+    "register.error.userExists": "Account already exists",
+    "register.error.failed": "Failed to create account",
+    "register.error.invalidData": "Failed validating your submission!",
+    "register.success": "Account created successfully",
+    "login.error.invalidCredentials": "Invalid credentials!",
+    "login.error.invalidData": "Failed validating your submission!",
+    "welcome": "Welcome to Turkish Airlines in-flight assistant!"
 }  
