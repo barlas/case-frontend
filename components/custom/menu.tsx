@@ -1,22 +1,12 @@
 'use client';
 
+import { t } from 'i18next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Card, CardContent } from "@/components/ui/card";
-
-interface Menu {
-  mealServices: {
-    mealServiceType: string;
-    selectionOptions: {
-      selectionGuidanceText?: string;
-      dishName: string;
-      ingredients?: string;
-      separatorAndOr?: string;
-    }[][];
-  }[];
-  footerDisclaimer: string;
-  isBusiness: boolean;
-}
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 export const SAMPLE: Menu = {
   mealServices: [
@@ -33,83 +23,128 @@ export const SAMPLE: Menu = {
   isBusiness: false
 };
 
-export function Menu({ menu = SAMPLE }: { menu?: Menu }) {
+interface Menu {
+  mealServices: {
+    mealServiceType: string;
+    selectionOptions: {
+      selectionGuidanceText?: string;
+      dishName: string;
+      ingredients?: string;
+      separatorAndOr?: string;
+    }[][];
+  }[];
+  footerDisclaimer: string;
+  isBusiness: boolean;
+}
+
+const LoadingMenu = () => (
+  <Card className="bg-background dark:bg-slate-900 text-foreground dark:text-white text-sm">
+    <CardContent className="p-6">
+      <div className="flex justify-center gap-4 mb-6">
+        <Skeleton className="h-7 w-32 rounded-full" />
+        <Skeleton className="h-7 w-32 rounded-full" />
+      </div>
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="space-y-3 mb-4">
+          <div className="flex flex-col items-center gap-1.5">
+            <Skeleton className="h-5 w-64" />
+            <Skeleton className="h-4 w-48 opacity-70" />
+          </div>
+        </div>
+      ))}
+      <Skeleton className="h-16 w-full mt-4 opacity-50" />
+    </CardContent>
+  </Card>
+);
+
+export function Menu({ menu = SAMPLE, loading = false }: { menu?: Menu, loading?: boolean }) {
   const safeMenu = menu && menu.mealServices ? menu : { mealServices: [] };
   const [activeCourseIndex, setActiveCourseIndex] = useState(0);
   const hasMultipleCourses = safeMenu.mealServices.length > 1;
+  const { t } = useTranslation();
+
+  if (loading) return <LoadingMenu />;
 
   return (
-    <Card className="max-w-xl mx-auto bg-slate-900 text-white text-sm">
-      <CardContent className="p-4">
-        <h2 className="text-lg font-medium text-center mb-3">Our Menu</h2>
-
-        {hasMultipleCourses && (
-          <div className="flex gap-2 mb-4">
-            {safeMenu.mealServices.map((meal, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveCourseIndex(idx)}
-                className={`px-3 py-1 rounded-full text-xs ${
-                  idx === activeCourseIndex
-                    ? 'bg-red-500'
-                    : 'bg-slate-700 hover:bg-slate-600'
-                }`}
-              >
-                {meal.mealServiceType}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {safeMenu.mealServices.map((meal, idx) => {
-          if (hasMultipleCourses && idx !== activeCourseIndex) return null;
-
-          return (
-            <div key={idx} className="space-y-3">
-              {!hasMultipleCourses && (
-                <h3 className="text-base font-medium mb-2">
+    <div className="flex-1 w-full">
+      <Card className="bg-background dark:bg-slate-900 text-foreground dark:text-white text-sm">
+        <CardContent className="p-6">
+          {hasMultipleCourses && (
+            <div className="flex justify-center gap-4 mb-6">
+              {safeMenu.mealServices.map((meal, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveCourseIndex(idx)}
+                  className={`px-6 py-1.5 rounded-full text-sm transition-colors ${
+                    idx === activeCourseIndex
+                      ? 'bg-[#E81932] text-white'
+                      : 'text-[#E81932] hover:bg-muted/80 dark:hover:bg-slate-800'
+                  }`}
+                >
                   {meal.mealServiceType}
-                </h3>
-              )}
-
-              {meal.selectionOptions.map((optionGroup, groupIdx) => (
-                <div key={groupIdx} className="space-y-2">
-                  {optionGroup.map((item, itemIdx) => (
-                    <div key={itemIdx} className="hover:bg-slate-800 p-2 rounded">
-                      {item.selectionGuidanceText && (
-                        <p className="text-xs italic text-slate-400">
-                          {item.selectionGuidanceText}
-                        </p>
-                      )}
-                      {item.separatorAndOr && (
-                        <p className="text-xs text-slate-400">
-                          {item.separatorAndOr}
-                        </p>
-                      )}
-                      <div className="flex justify-between items-baseline gap-2">
-                        <span className="font-medium">
-                          {item.dishName.toUpperCase()}
-                        </span>
-                        {item.ingredients && (
-                          <span className="text-xs text-slate-400 italic">
-                            {item.ingredients}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                </button>
               ))}
             </div>
-          );
-        })}
+          )}
 
-        {menu.footerDisclaimer && (
-          <div className="mt-4 p-2 bg-slate-800 rounded text-center text-xs">
-            {menu.footerDisclaimer}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          {safeMenu.mealServices.map((meal, idx) => {
+            if (hasMultipleCourses && idx !== activeCourseIndex) return null;
+
+            return (
+              <div key={idx} className="space-y-4 max-w-2xl mx-auto">
+                {meal.selectionOptions.map((optionGroup, groupIdx) => (
+                  <div key={groupIdx} className="space-y-3">
+                    {optionGroup.map((item, itemIdx) => (
+                      <div key={itemIdx} className="text-center">
+                        {item.selectionGuidanceText && (
+                          <p className="text-xs text-[#666]/80 dark:text-[#666]/60 italic mb-1">
+                            {item.selectionGuidanceText}
+                          </p>
+                        )}
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button 
+                                className="flex flex-col items-center gap-0.5 w-full transition-colors hover:bg-muted/50 dark:hover:bg-slate-800/50 rounded-md p-1"
+                                onClick={() => {/* Implement click handler */}}
+                              >
+                                <div className="flex items-center gap-2">
+                                  {item.separatorAndOr && (
+                                    <span className="text-sm text-[#666]/80 dark:text-[#666]/60">
+                                      {item.separatorAndOr}
+                                    </span>
+                                  )}
+                                  <span className="font-medium text-foreground dark:text-white">
+                                    {item.dishName.toUpperCase()}
+                                    {item.ingredients && (
+                                      <span className="text-xs italic ml-2">
+                                        ({item.ingredients})
+                                      </span>
+                                    )}
+                                  </span>
+                                </div>
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{t('menu.askMeAnything')}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+
+          {menu.footerDisclaimer && (
+            <div className="mt-4 text-center text-[11px] max-w-2xl mx-auto text-[#666]/70 dark:text-[#666]/50 leading-tight">
+              {menu.footerDisclaimer}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

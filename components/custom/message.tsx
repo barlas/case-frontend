@@ -74,7 +74,7 @@ export const PreviewMessage = ({
                     <div
                       key={toolCallId}
                       className={cx({
-                        skeleton: ['getWeather'].includes(toolName),
+                        skeleton: ['getMenu', 'getWeather'].includes(toolName),
                       })}
                     >
                       {toolName === 'getMenu' ? (

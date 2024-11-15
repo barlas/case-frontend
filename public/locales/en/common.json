@@ -54,5 +54,6 @@
     "chat.history.login": "Login to save and revisit previous chats!",
     "chat.history.delete.loading": "Deleting chat...",
     "chat.history.delete.success": "Chat deleted successfully",
-    "chat.history.delete.error": "Failed to delete chat"
+    "chat.history.delete.error": "Failed to delete chat",
+    "menu.askMeAnything": "Got any questions about this dish? Ask me!"
 }  
