@@ -1,9 +1,10 @@
+'use client';
+
 import Form from 'next/form';
 import { useTranslation } from 'react-i18next';
 
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-
 
 export function AuthForm({
   action,
@@ -17,11 +18,11 @@ export function AuthForm({
   const { t } = useTranslation();
   
   return (
-    <Form action={action} className="flex flex-col gap-4 px-4 sm:px-16">
+    <Form action={action} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="email"
-          className="text-zinc-600 font-normal dark:text-zinc-400"
+          className="text-sm font-medium text-white"
         >
           {t('login.form.email')}
         </Label>
@@ -29,7 +30,7 @@ export function AuthForm({
         <Input
           id="email"
           name="email"
-          className="bg-muted text-md md:text-sm"
+          className="h-11 border-0 bg-white/10 text-white placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-white/40"
           type="email"
           placeholder="user@acme.com"
           autoComplete="email"
@@ -42,7 +43,7 @@ export function AuthForm({
       <div className="flex flex-col gap-2">
         <Label
           htmlFor="password"
-          className="text-zinc-600 font-normal dark:text-zinc-400"
+          className="text-sm font-medium text-white"
         >
           {t('login.form.password')}
         </Label>
@@ -50,7 +51,7 @@ export function AuthForm({
         <Input
           id="password"
           name="password"
-          className="bg-muted text-md md:text-sm"
+          className="h-11 border-0 bg-white/10 text-white placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-white/40"
           type="password"
           required
         />

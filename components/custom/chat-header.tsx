@@ -10,6 +10,7 @@ import { BetterTooltip } from '@/components/ui/tooltip';
 
 import { PlusIcon } from './icons';
 import { LanguageSelector } from './language-selector';
+import { ThemeSelector } from './theme-selector';
 import { useSidebar } from '../ui/sidebar';
 
 export function ChatHeader({ selectedModelId }: { selectedModelId: string }) {
@@ -39,6 +40,7 @@ export function ChatHeader({ selectedModelId }: { selectedModelId: string }) {
       <LanguageSelector
         className="order-1 md:order-2"
       />
+      <ThemeSelector />
     </header>
   );
 }

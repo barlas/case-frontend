@@ -7,15 +7,16 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { AuthForm } from '@/components/custom/auth-form';
+import { TurkishAirlinesLogo } from '@/components/custom/icons';
 import { LanguageSelector } from '@/components/custom/language-selector';
 import { SubmitButton } from '@/components/custom/submit-button';
+import { ThemeSelector } from '@/components/custom/theme-selector';
 
 import { register, RegisterActionState } from '../actions';
 
 export default function Page() {
   const { t } = useTranslation();
   const router = useRouter();
-
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -46,33 +47,45 @@ export default function Page() {
   };
 
   return (
-    <>
-      <LanguageSelector />
-      <div className="flex h-dvh w-screen items-start pt-12 md:pt-0 md:items-center justify-center bg-background">
-        <div className="w-full max-w-md overflow-hidden rounded-2xl gap-12 flex flex-col">
-          <div className="flex flex-col items-center justify-center gap-2 px-4 text-center sm:px-16">
-            <h3 className="text-xl font-semibold dark:text-zinc-50 capitalize">
-              {t('login.form.signUp')}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-zinc-400">
-              {t('login.form.signUpPrompt')}
-            </p>
+    <div className="min-h-dvh bg-[url('/images/thy-bg-2.jpg')] bg-cover bg-center">
+      <div className="min-h-dvh bg-black/40 backdrop-blur-sm">
+        <div className="container mx-auto flex min-h-dvh flex-col items-center justify-center px-4">
+          <div className="fixed inset-x-0 top-0 flex items-center justify-between bg-black/20 px-6 py-4 backdrop-blur-sm">
+            <div className="flex items-center gap-2">
+              <TurkishAirlinesLogo />
+            </div>
+            <div className="flex items-center gap-2">
+              <ThemeSelector />
+              <LanguageSelector className="border-none bg-white/10 text-white hover:bg-white/20" />
+            </div>
           </div>
-          <AuthForm action={handleSubmit} defaultEmail={email}>
-            <SubmitButton isSuccessful={isSuccessful}>Sign Up</SubmitButton>
-            <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
-              {t('login.form.signInPrompt')}
-              <Link
-                href={`/login`}
-                className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
-              >
-                {t('login.form.signInCta')}
-              </Link>
-              {t('login.form.signInCtaContent')}
-            </p>
-          </AuthForm>
+
+
+          <div className="w-full max-w-md rounded-2xl bg-white/10 p-8 backdrop-blur-md">
+            <div className="mb-8 text-center">
+              <h1 className="mb-2 text-2xl font-bold text-white">{t('login.form.signUp')}</h1>
+              <p className="text-sm text-gray-300">{t('login.form.signUpTitle')}</p>
+            </div>
+
+            <AuthForm action={handleSubmit} defaultEmail={email}>
+              <SubmitButton isSuccessful={isSuccessful}>
+                {t('login.form.signUp')}
+              </SubmitButton>
+
+              <p className="mt-4 text-center text-sm text-gray-300">
+                {t('login.form.signInPrompt')}
+                <Link 
+                  href="/login" 
+                  className="font-semibold text-white hover:text-[#E81932]"
+                >
+                  {t('login.form.signInCta')}
+                </Link>
+                {t('login.form.signInCtaContent')}
+              </p>
+            </AuthForm>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
