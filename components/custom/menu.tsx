@@ -31,6 +31,10 @@ export const SAMPLE: Menu = {
   isBusiness: false
 };
 
+interface MenuProps {
+  onTabChange: () => void;
+}
+
 export function Menu({
   menu = SAMPLE,
 }: {
@@ -51,8 +55,12 @@ export function Menu({
           {safeMenu.mealServices.map((meal, idx) => (
             <button
               key={idx}
+              type="button"
               className={`tab ${idx === activeCourseIndex ? 'active' : ''}`}
-              onClick={() => setActiveCourseIndex(idx)}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveCourseIndex(idx);
+              }}
             >
               {meal.mealServiceType}
             </button>

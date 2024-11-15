@@ -49,7 +49,7 @@ export function Chat({
   );
 
   const [messagesContainerRef, messagesEndRef] =
-    useScrollToBottom<HTMLDivElement>();
+    useScrollToBottom<HTMLDivElement>(isLoading);
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
 
