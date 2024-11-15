@@ -19,11 +19,13 @@ export const PreviewMessage = ({
   message,
   vote,
   isLoading,
+  onSelectDish,
 }: {
   chatId: string;
   message: Message;
   vote: Vote | undefined;
   isLoading: boolean;
+  onSelectDish: (prompt: string) => void;
 }) => {
   return (
     <motion.div
@@ -61,7 +63,7 @@ export const PreviewMessage = ({
                   return (
                     <div key={toolCallId}>
                       {toolName === 'getMenu' ? (
-                        <Menu menu={result} />
+                        <Menu menu={result} onSelectDish={onSelectDish} />
                       ) : toolName === 'getWeather' ? (
                         <Weather weatherAtLocation={result} />
                       ) : (
@@ -78,7 +80,7 @@ export const PreviewMessage = ({
                       })}
                     >
                       {toolName === 'getMenu' ? (
-                        <Menu />
+                        <Menu loading />
                       ) : toolName === 'getWeather' ? (
                         <Weather />
                       ) : null}

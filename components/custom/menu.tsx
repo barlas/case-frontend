@@ -57,11 +57,24 @@ const LoadingMenu = () => (
   </Card>
 );
 
-export function Menu({ menu = SAMPLE, loading = false }: { menu?: Menu, loading?: boolean }) {
+interface MenuProps {
+  menu?: Menu;
+  loading?: boolean;
+  onSelectDish?: (dish: string, ingredients?: string) => void;
+}
+
+export function Menu({ menu = SAMPLE, loading = false, onSelectDish }: MenuProps) {
   const safeMenu = menu && menu.mealServices ? menu : { mealServices: [] };
   const [activeCourseIndex, setActiveCourseIndex] = useState(0);
   const hasMultipleCourses = safeMenu.mealServices.length > 1;
   const { t } = useTranslation();
+
+  const handleDishClick = (dishName: string, ingredients?: string) => {
+    const prompt = ingredients 
+      ? t('menu.tellMeMoreWithIngredients', { dishName, ingredients })
+      : t('menu.tellMeMore', { dishName });
+    onSelectDish?.(prompt);
+  };
 
   if (loading) return <LoadingMenu />;
 
@@ -106,7 +119,7 @@ export function Menu({ menu = SAMPLE, loading = false }: { menu?: Menu, loading?
                             <TooltipTrigger asChild>
                               <button 
                                 className="flex flex-col items-center gap-0.5 w-full transition-colors hover:bg-muted/50 dark:hover:bg-slate-800/50 rounded-md p-1"
-                                onClick={() => {/* Implement click handler */}}
+                                onClick={() => handleDishClick(item.dishName, item.ingredients)}
                               >
                                 <div className="flex items-center gap-2">
                                   {item.separatorAndOr && (

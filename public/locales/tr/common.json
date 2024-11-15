@@ -55,5 +55,7 @@
     "chat.history.delete.loading": "Sohbet siliniyor...",
     "chat.history.delete.success": "Sohbet başarıyla silindi",
     "chat.history.delete.error": "Sohbet silinemedi",
-    "menu.askMeAnything": "Bu yemek hakkında sorularınız mı var? Bana sorun!"
+    "menu.askMeAnything": "Bu yemek hakkında daha fazla bilgi almak için tıklayın.",
+    "menu.tellMeMore": "{dishName} hakkında daha fazla bilgi ver",
+    "menu.tellMeMoreWithIngredients": "{dishName} ve {ingredients} hakkında daha fazla bilgi ver"
 }

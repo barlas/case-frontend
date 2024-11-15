@@ -74,6 +74,12 @@ export function Chat({
                   ? votes.find((vote) => vote.messageId === message.id)
                   : undefined
               }
+              onSelectDish={(prompt) => {
+                append({
+                  role: 'user',
+                  content: prompt,
+                });
+              }}
             />
           ))}
 
