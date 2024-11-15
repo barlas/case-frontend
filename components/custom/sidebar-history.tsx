@@ -56,13 +56,10 @@ export function ChatItem ({
   onDelete: (chatId: string) => void;
   setOpenMobile: (open: boolean) => void;
 }) {
-  const params = useParams();
-  const locale = params.locale as string;
-
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link href={`/${locale}/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
+        <Link href={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
           <span>{chat.title}</span>
         </Link>
       </SidebarMenuButton>

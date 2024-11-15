@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -12,8 +12,6 @@ import { register, RegisterActionState } from '../actions';
 
 export default function Page() {
   const router = useRouter();
-  const params = useParams();
-  const locale = params.locale as string;
 
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
@@ -58,7 +56,7 @@ export default function Page() {
           <p className="text-center text-sm text-gray-600 mt-4 dark:text-zinc-400">
             {'Already have an account? '}
             <Link
-              href={`/${locale}/login`}
+              href={`/login`}
               className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
             >
               Sign in

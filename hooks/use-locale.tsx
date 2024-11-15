@@ -1,11 +1,10 @@
-import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import i18n from '@/i18n';
 
 export function useLocale() {
-  const params = useParams();
-  const locale = params.locale as string || 'en';
+  const [locale, setLocale] = useLocalStorage('locale', 'en');
 
   useEffect(() => {
     if (i18n.language !== locale) {
@@ -13,5 +12,5 @@ export function useLocale() {
     }
   }, [locale]);
 
-  return locale;
+  return [locale, setLocale] as const;
 }
