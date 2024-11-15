@@ -51,7 +51,6 @@ export function Menu({
           {safeMenu.mealServices.map((meal, idx) => (
             <button
               key={idx}
-              type="button"
               className={`tab ${idx === activeCourseIndex ? 'active' : ''}`}
               onClick={() => setActiveCourseIndex(idx)}
             >

@@ -11,7 +11,6 @@ import { customModel } from '@/ai';
 import { models } from '@/ai/models';
 import { systemPrompt } from '@/ai/prompts';
 import { auth } from '@/app/(auth)/auth';
-import { generateTitleFromUserMessage } from '@/app/(chat)/actions';
 import {
   deleteChatById,
   getChatById,
@@ -23,6 +22,8 @@ import {
   getMostRecentUserMessage,
   sanitizeResponseMessages,
 } from '@/lib/utils';
+
+import { generateTitleFromUserMessage } from '../../actions';
 
 export const maxDuration = 60;
 
@@ -159,8 +160,6 @@ export async function POST(request: Request) {
         try {
           const responseMessagesWithoutIncompleteToolCalls =
             sanitizeResponseMessages(responseMessages);
-          
-          console.log('Response Messages:', responseMessagesWithoutIncompleteToolCalls);
 
           await saveMessages({
             messages: responseMessagesWithoutIncompleteToolCalls.map(
