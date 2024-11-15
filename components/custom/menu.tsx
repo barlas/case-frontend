@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Menu {
   mealServices: {
@@ -31,79 +33,83 @@ export const SAMPLE: Menu = {
   isBusiness: false
 };
 
-export function Menu({
-  menu = SAMPLE,
-}: {
-  menu?: Menu;
-}) {
+export function Menu({ menu = SAMPLE }: { menu?: Menu }) {
   const safeMenu = menu && menu.mealServices ? menu : { mealServices: [] };
-
   const [activeCourseIndex, setActiveCourseIndex] = useState(0);
-
   const hasMultipleCourses = safeMenu.mealServices.length > 1;
 
   return (
-    <div className="bg-card p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Menu</h2>
+    <Card className="max-w-xl mx-auto bg-slate-900 text-white text-sm">
+      <CardContent className="p-4">
+        <h2 className="text-lg font-medium text-center mb-3">Our Menu</h2>
 
-      {hasMultipleCourses && (
-        <div className="tabs mb-4">
-          {safeMenu.mealServices.map((meal, idx) => (
-            <button
-              key={idx}
-              className={`tab ${idx === activeCourseIndex ? 'active' : ''}`}
-              onClick={() => setActiveCourseIndex(idx)}
-            >
-              {meal.mealServiceType}
-            </button>
-          ))}
-        </div>
-      )}
+        {hasMultipleCourses && (
+          <div className="flex gap-2 mb-4">
+            {safeMenu.mealServices.map((meal, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveCourseIndex(idx)}
+                className={`px-3 py-1 rounded-full text-xs ${
+                  idx === activeCourseIndex
+                    ? 'bg-red-500'
+                    : 'bg-slate-700 hover:bg-slate-600'
+                }`}
+              >
+                {meal.mealServiceType}
+              </button>
+            ))}
+          </div>
+        )}
 
-      <div>
         {safeMenu.mealServices.map((meal, idx) => {
-          // Only render the active course if tabs are present
           if (hasMultipleCourses && idx !== activeCourseIndex) return null;
 
           return (
-            <div key={idx} className="mb-6">
-              {/* Only display the meal title if there are no tabs */}
+            <div key={idx} className="space-y-3">
               {!hasMultipleCourses && (
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-base font-medium mb-2">
                   {meal.mealServiceType}
                 </h3>
               )}
 
               {meal.selectionOptions.map((optionGroup, groupIdx) => (
-                <div key={groupIdx}>
-                  <ul className="mb-2">
-                    {optionGroup.map((item, itemIdx) => (
-                      <li key={itemIdx} className="mb-1">
-                        {item.selectionGuidanceText && (
-                          <span className="italic mb-2">{item.selectionGuidanceText}<br /></span>
-                        )}
-                        {item.separatorAndOr && (
-                          <span>{item.separatorAndOr}<br /></span>
-                        )}
-                        <span className={`font-${menu.isBusiness ? 'bold' : 'medium'}`}>
+                <div key={groupIdx} className="space-y-2">
+                  {optionGroup.map((item, itemIdx) => (
+                    <div key={itemIdx} className="hover:bg-slate-800 p-2 rounded">
+                      {item.selectionGuidanceText && (
+                        <p className="text-xs italic text-slate-400">
+                          {item.selectionGuidanceText}
+                        </p>
+                      )}
+                      {item.separatorAndOr && (
+                        <p className="text-xs text-slate-400">
+                          {item.separatorAndOr}
+                        </p>
+                      )}
+                      <div className="flex justify-between items-baseline gap-2">
+                        <span className="font-medium">
                           {item.dishName.toUpperCase()}
                         </span>
                         {item.ingredients && (
-                          <span>: {item.ingredients}</span>
+                          <span className="text-xs text-slate-400 italic">
+                            {item.ingredients}
+                          </span>
                         )}
-                      </li>
-                    ))}
-                  </ul>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
           );
         })}
-      </div>
 
-      <div className="bg-accent p-4 mt-4 rounded-md text-center font-bold">
-        {menu.footerDisclaimer ?? null}
-      </div>
-    </div>
+        {menu.footerDisclaimer && (
+          <div className="mt-4 p-2 bg-slate-800 rounded text-center text-xs">
+            {menu.footerDisclaimer}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
