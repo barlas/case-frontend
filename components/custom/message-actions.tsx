@@ -1,4 +1,5 @@
 import { Message } from 'ai';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useSWRConfig } from 'swr';
 import { useCopyToClipboard } from 'usehooks-ts';
@@ -26,6 +27,7 @@ export function MessageActions({
   vote: Vote | undefined;
   isLoading: boolean;
 }) {
+  const { t } = useTranslation();
   const { mutate } = useSWRConfig();
   const [_, copyToClipboard] = useCopyToClipboard();
 
@@ -44,13 +46,13 @@ export function MessageActions({
               variant="outline"
               onClick={async () => {
                 await copyToClipboard(message.content as string);
-                toast.success('Copied to clipboard!');
+                toast.success(t('common.copied'));
               }}
             >
               <CopyIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Copy</TooltipContent>
+          <TooltipContent>{t('common.copy')}</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -72,7 +74,7 @@ export function MessageActions({
                 });
 
                 toast.promise(upvote, {
-                  loading: 'Upvoting Response...',
+                  loading: t('common.upvoteResponseLoading'),
                   success: () => {
                     mutate<Array<Vote>>(
                       `/api/vote?chatId=${chatId}`,
@@ -95,16 +97,16 @@ export function MessageActions({
                       { revalidate: false }
                     );
 
-                    return 'Upvoted Response!';
+                    return t('common.upvoteResponse');
                   },
-                  error: 'Failed to upvote response.',
+                  error: t('common.upvoteResponseError'),
                 });
               }}
             >
               <ThumbUpIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Upvote Response</TooltipContent>
+          <TooltipContent>{t('common.upvoteResponse')}</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -126,7 +128,7 @@ export function MessageActions({
                 });
 
                 toast.promise(downvote, {
-                  loading: 'Downvoting Response...',
+                  loading: t('common.downvoteResponseLoading'),
                   success: () => {
                     mutate<Array<Vote>>(
                       `/api/vote?chatId=${chatId}`,
@@ -149,16 +151,16 @@ export function MessageActions({
                       { revalidate: false }
                     );
 
-                    return 'Downvoted Response!';
+                    return t('common.downvoteResponse');
                   },
-                  error: 'Failed to downvote response.',
+                  error: t('common.downvoteResponseError'),
                 });
               }}
             >
               <ThumbDownIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Downvote Response</TooltipContent>
+          <TooltipContent>{t('common.downvoteResponse')}</TooltipContent>
         </Tooltip>
       </div>
     </TooltipProvider>
