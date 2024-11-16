@@ -57,5 +57,6 @@
     "chat.history.delete.error": "Failed to delete chat",
     "menu.askMeAnything": "Tap to discover more about this meal.",
     "menu.tellMeMore": "Tell me more about {dishName}",
-    "menu.tellMeMoreWithIngredients": "Tell me more about {dishName} with {ingredients}"
+    "menu.tellMeMoreWithIngredients": "Tell me more about {dishName} with {ingredients}",
+    "chat.error.somethingWentWrong": "Something went wrong. Please try again..."
 }  

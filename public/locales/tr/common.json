@@ -57,5 +57,6 @@
     "chat.history.delete.error": "Sohbet silinemedi",
     "menu.askMeAnything": "Bu yemek hakkında daha fazla bilgi almak için tıklayın.",
     "menu.tellMeMore": "{dishName} hakkında daha fazla bilgi ver",
-    "menu.tellMeMoreWithIngredients": "{dishName} ve {ingredients} hakkında daha fazla bilgi ver"
+    "menu.tellMeMoreWithIngredients": "{dishName} ve {ingredients} hakkında daha fazla bilgi ver",
+    "chat.error.somethingWentWrong": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin..."
 }

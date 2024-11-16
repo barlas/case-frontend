@@ -4,6 +4,7 @@ import { Attachment, Message } from 'ai';
 import { useChat } from 'ai/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 
@@ -27,6 +28,7 @@ export function Chat({
 }) {
   const { mutate } = useSWRConfig();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const {
     messages,
@@ -45,7 +47,7 @@ export function Chat({
       mutate(`/api/history`);
     },
     onError: () => {
-      toast.error("Something went wrong. Starting a new chat...");
+      toast.error(t('chat.error.somethingWentWrong'));
       setTimeout(() => {
         router.push('/');
         router.refresh();
