@@ -29,8 +29,8 @@ Uses a modern, modular architecture designed for scalability and performance.
 
 ### 🔧 Backend
 - **API Routes**
-  - `/api/chat`: Message processing and AI SDK integration
-  - `/api/files/upload`: File management with [Vercel Blob](https://vercel.com/storage/blob)
+  - `/api/chat`: Message processing
+  - `/api/files/upload`: File management
 - **Authentication**
   - Secure user sessions via [NextAuth.js](https://github.com/nextauthjs/next-auth)
 - **Data Storage**
