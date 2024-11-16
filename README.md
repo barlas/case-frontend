@@ -3,51 +3,78 @@
 </a>
 
 <p align="center">
-  A chatbot for Turkish Airlines in-flight service.
+  An AI-powered virtual assistant designed to enhance passenger experience by providing real-time flight information, menu recommendations, and addressing in-flight queries through natural conversation.
 </p>
 
 <p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#deployment"><strong>Deployment</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a>
+  <a href="#architecture-overview"><strong>Architecture</strong></a> ·
+  <a href="#setup-instructions"><strong>Setup</strong></a> ·
+  <a href="#deployment"><strong>Deployment</strong></a>
 </p>
 <br/>
 
-## Features
+## Architecture 
 
-- [Next.js](https://nextjs.org) App Router
-  - Advanced routing for seamless navigation and performance
-  - React Server Components (RSCs) and Server Actions for server-side rendering and increased performance
-- [AI SDK](https://sdk.vercel.ai/docs)
-  - Unified API for generating text, structured objects, and tool calls with LLMs
-  - Hooks for building dynamic chat and generative user interfaces
-  - Uses OpenAI `gpt-4o`
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
-- Data Persistence
-  - [Vercel Postgres powered by Neon](https://vercel.com/storage/postgres) for saving chat history and user data
-  - [Vercel Blob](https://vercel.com/storage/blob) for efficient file storage
-- [NextAuth.js](https://github.com/nextauthjs/next-auth)
-  - Simple and secure authentication
+Uses a modern, modular architecture designed for scalability and performance.
 
-## Deployment
+### 🎨 Frontend
+- **[Next.js](https://nextjs.org) App Router**
+  - Client-side routing and server-side rendering
+  - React Server Components (RSCs)
+- **[shadcn/ui](https://ui.shadcn.com) Components**
+  - Built on [Radix UI](https://radix-ui.com) primitives
+  - Styled with [Tailwind CSS](https://tailwindcss.com)
+- **AI Chat Interface**
+  - Real-time chat using AI SDK
+  - Tool integrations (`getMenu`, `getWeather`)
+- **Internationalization**
+  - Supports multiple languages using [next-i18next](https://github.com/isaachinman/next-i18next).
 
-[![ Vercel](https://vercel.com/button)](https://vercel.com)
+### 🔧 Backend
+- **API Routes**
+  - `/api/chat`: Message processing and AI SDK integration
+  - `/api/files/upload`: File management with [Vercel Blob](https://vercel.com/storage/blob)
+- **Authentication**
+  - Secure user sessions via [NextAuth.js](https://github.com/nextauthjs/next-auth)
+- **Data Storage**
+  - [Vercel Postgres](https://vercel.com/storage/postgres): User data and chat histories
+  - [Vercel Blob](https://vercel.com/storage/blob): Media and file storage
 
-## Running locally
+### 🤖 AI Integration
+- **[AI SDK](https://sdk.vercel.ai/docs)**
+  - OpenAI `GPT-4o` integration
+  - Message streaming and response processing
+- **Custom Tools**
+  - `getMenu`: OCR-based menu extraction
+  - `getWeather`: Real-time weather information
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+## Setup Instructions
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+### Prerequisites
+- [Node.js](https://nodejs.org/) 18+
+- [pnpm](https://pnpm.io/) package manager
+- [Vercel](https://vercel.com/) account
+- [OpenAI API key](https://platform.openai.com/api-keys)
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+### Installation Steps
 
+1. Clone and set up environment variables:
+```bash
+npm i -g vercel
+vercel link    # Link to Vercel project
+vercel env pull # Pull environment variables
+```
+
+2. Install and run:
 ```bash
 pnpm install
 pnpm dev
 ```
 
 Your app should now be running on [localhost:3000](http://localhost:3000/).
+
+## Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com)
+
+Pushing changes to the main branch will automatically trigger a production deployment via Vercel's CI/CD pipeline.
