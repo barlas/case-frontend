@@ -2,7 +2,9 @@
 
 import { Attachment, Message } from 'ai';
 import { useChat } from 'ai/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 
 import { ChatHeader } from '@/components/custom/chat-header';
@@ -24,6 +26,7 @@ export function Chat({
   selectedModelId: string;
 }) {
   const { mutate } = useSWRConfig();
+  const router = useRouter();
 
   const {
     messages,
@@ -40,6 +43,13 @@ export function Chat({
     initialMessages,
     onFinish: () => {
       mutate(`/api/history`);
+    },
+    onError: () => {
+      toast.error("Something went wrong. Starting a new chat...");
+      setTimeout(() => {
+        router.push('/');
+        router.refresh();
+      }, 1500);
     },
   });
 
