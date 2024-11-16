@@ -55,7 +55,7 @@ Uses a modern, modular architecture designed for scalability and performance.
 
 ### Installation Steps
 
-1. Clone and set up environment variables:
+1. Set up environment variables:
 ```bash
 npm i -g vercel
 vercel link    # Link to Vercel project
