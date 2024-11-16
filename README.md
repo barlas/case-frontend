@@ -25,7 +25,7 @@ Uses a modern, modular architecture designed for scalability and performance.
   - Built on [Radix UI](https://radix-ui.com) primitives
   - Styled with [Tailwind CSS](https://tailwindcss.com)
 - **AI Chat Interface**
-  - Real-time chat using AI SDK
+  - Real-time chat using [AI SDK](https://sdk.vercel.ai/docs/introduction)
   - Tool integrations (`getMenu`, `getWeather`)
 - **Internationalization**
   - Supports multiple languages using [next-i18next](https://github.com/isaachinman/next-i18next).
