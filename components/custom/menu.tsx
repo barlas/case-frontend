@@ -121,9 +121,9 @@ export function Menu({ menu = SAMPLE, loading = false, onSelectDish }: MenuProps
                                 className="flex flex-col items-center gap-0.5 w-full transition-colors hover:bg-muted/50 dark:hover:bg-slate-800/50 rounded-md p-1"
                                 onClick={() => handleDishClick(item.dishName, item.ingredients)}
                               >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-center gap-2 w-full">
                                   {item.separatorAndOr && (
-                                    <span className="text-sm text-[#666]/80 dark:text-[#666]/60">
+                                    <span className="text-sm text-[#666]/80 dark:text-[#666]/60 min-w-[40px] text-right">
                                       {item.separatorAndOr}
                                     </span>
                                   )}
